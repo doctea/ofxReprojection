@@ -35,8 +35,8 @@ bool ofxReprojectionCalibration::init(  ofxBase3DVideo *cam,
 	ostringstream msg; msg << "Initing ofxReprojectionCalibration with depth cam type " << typeid(*cam).name() << ".";
 	ofLogVerbose("ofxReprojection") << msg.str();
 
-	camHeight = cam->getPixelsRef().getHeight();
-	camWidth = cam->getPixelsRef().getWidth();
+	camHeight = cam->getPixels().getHeight();
+	camWidth = cam->getPixels().getWidth();
 
 	this->config = config;
 
@@ -383,7 +383,7 @@ void ofxReprojectionCalibration::update() {
 
 void ofxReprojectionCalibration::update(bool forceupdate) {
 	if(refMaxDepth < 0) {
-		refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels(), camWidth, camHeight);
+		refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels().getData(), camWidth, camHeight);
 	}
 
 	//
@@ -405,11 +405,11 @@ void ofxReprojectionCalibration::update(bool forceupdate) {
 	//
 	if(bHasReceivedFirstFrame && (forceupdate || cam->isFrameNew())) {
 		// ofLogVerbose("ofxReprojection") << "Calibration update: Updating chessboard";
-		ofxReprojectionUtils::makeHueDepthImage(cam->getDistancePixels(), camWidth, camHeight, refMaxDepth, depthImage);
-		depthFloats.setFromPixels(cam->getDistancePixels(), camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+		ofxReprojectionUtils::makeHueDepthImage(cam->getDistancePixels().getData(), camWidth, camHeight, refMaxDepth, depthImage);
+		depthFloats.setFromPixels(cam->getDistancePixels().getData(), camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 
 		// Convert color image to OpenCV image.
-		unsigned char *pPixelsUC = (unsigned char*) cam->getPixels();
+		unsigned char *pPixelsUC = (unsigned char*) cam->getPixels().getData();
 		cv::Mat chessdetectimage(camHeight, camWidth, CV_8UC(3), pPixelsUC);
 
 		vector<cv::Point2f> chesscorners;
@@ -462,7 +462,7 @@ void ofxReprojectionCalibration::update(bool forceupdate) {
 			chessfound_includes_depth = true;
 			for(uint i = 0; i < chesscorners.size(); i++) {
 				// ofLogVerbose("ofxReprojection") << "Calibration update: Found chessboard, interp z coord #" << i << ".";
-				float *pDPixel = (float*) cam->getDistancePixels();
+				float *pDPixel = (float*) cam->getDistancePixels().getData();
 
 				// Calculate 3D point from color and depth image ("world coords")
 				cv::Point3f p;

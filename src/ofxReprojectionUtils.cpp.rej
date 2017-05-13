@@ -1,0 +1,38 @@
+--- ofxReprojectionUtils.cpp
++++ ofxReprojectionUtils.cpp
+@@ -28,7 +28,7 @@ void ofxReprojectionUtils::setupScreen(ofMatrix4x4 m) {
+ //
+ //
+ 
+-const string ofxReprojectionUtils::stringVertexShader2DPoints =        "#version 150\n"
++const string ofxReprojectionUtils::stringVertexShader2DPoints =        "#version 120\n"
+                        "#extension GL_ARB_texture_rectangle : enable\n"
+                        STRINGIFY(
+ 
+@@ -58,7 +58,7 @@ const string ofxReprojectionUtils::stringVertexShader2DPoints =       "#version 120\n
+        }
+ );
+ 
+-const string ofxReprojectionUtils::stringFragmentShader2DPoints = "#version 150\n"
++const string ofxReprojectionUtils::stringFragmentShader2DPoints = "#version 120\n"
+                STRINGIFY(
+        void main() {
+                if(gl_Color.rgb == vec3(0,0,0)) discard;
+@@ -102,7 +102,7 @@ const string ofxReprojectionUtils::stringVertexShader2DTriangles =  "#version 15
+        }
+ );
+ 
+-const string ofxReprojectionUtils::stringFragmentShader2DTriangles = "#version 120\n"
++const string ofxReprojectionUtils::stringFragmentShader2DTriangles = "#version 150\n"
+                        STRINGIFY(
+     in vec3 frontColorGeometry;
+     out vec4 outputColor;
+@@ -113,7 +113,7 @@ const string ofxReprojectionUtils::stringFragmentShader2DTriangles = "#version 1
+                        );
+ 
+ // TODO: Clean up this shader a little?
+-const string ofxReprojectionUtils::stringGeometryShader2DTriangles = "#version 120\n"
++const string ofxReprojectionUtils::stringGeometryShader2DTriangles = "#version 150\n"
+                        STRINGIFY(
+        // Pointsize variable used as maximum length of triangle side.
+        // 0.2 seems like a good value here, but a better measure

@@ -38,10 +38,10 @@ bool ofxReprojectionRenderer2D::init(ofxBase3DVideo *cam) {
 		this->cam = cam;
 	}
 
-	camWidth = cam->getPixelsRef().getWidth();
-	camHeight = cam->getPixelsRef().getHeight();
+	camWidth = cam->getPixels().getWidth();
+	camHeight = cam->getPixels().getHeight();
 
-	refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels(), camWidth, camHeight);
+	refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels().getData(), camWidth, camHeight);
 
 	depthFloats.allocate(camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 	depthFloats.getTextureReference().setTextureMinMagFilter(GL_NEAREST, GL_NEAREST);
@@ -60,10 +60,10 @@ void ofxReprojectionRenderer2D::update() {
 	if(cam->isFrameNew()) {
 
 		if(refMaxDepth == -1) {
-			refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels(), camWidth, camHeight);
+			refMaxDepth = ofxReprojectionUtils::getMaxDepth(cam->getDistancePixels().getData(), camWidth, camHeight);
 		}
 
-		depthFloats.setFromPixels(cam->getDistancePixels(), camWidth, camHeight, OF_IMAGE_GRAYSCALE);
+		depthFloats.setFromPixels(cam->getDistancePixels().getData(), camWidth, camHeight, OF_IMAGE_GRAYSCALE);
 		bDepthUpdated = true;
 	}
 }
@@ -91,7 +91,7 @@ void ofxReprojectionRenderer2D::drawHueDepthImage() {
 	}
 
 	if(bDepthUpdated) {
-		ofxReprojectionUtils::makeHueDepthImage(cam->getDistancePixels(), camWidth, camHeight, refMaxDepth, huetex);
+		ofxReprojectionUtils::makeHueDepthImage(cam->getDistancePixels().getData(), camWidth, camHeight, refMaxDepth, huetex);
 		bDepthUpdated = false;
 	}
 	drawImage(huetex);

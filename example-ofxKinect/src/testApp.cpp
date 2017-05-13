@@ -46,7 +46,9 @@ void testApp::draw(){
 	}
 	
 	if(calibration.isFinalized() && rendererInited) {
+		// cout << "testApp::draw() about to call drawHueDepthImage() " << endl;
 		renderer.drawHueDepthImage();
+		//cout << "testApp::draw() called drawHueDepthImage() " << endl;
 	}
 }
 
